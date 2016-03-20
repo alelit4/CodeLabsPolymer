@@ -57,13 +57,14 @@
 <!-- Code Lab step 6 -->
 <template is="dom-bind">
 
-<google-map map={{map}} latitude="28.483036" longitude="-16.321483" api-key="AIzaSyB4F58sfxdKgEIF7OY60fEob2mHmS6lXq0"
+<google-map map={{map}} latitude="28.483036" longitude="-16.321483"
+            api-key="API_KEY"
             zoom="13" disable-default-ui>
     <google-map-marker latitude="28.483036" longitude="-16.321483"
                        title="ETSII!" draggable="true"></google-map-marker>
 </google-map>
 
-<google-map-directions  map={{map}} api-key="AIzaSyB4F58sfxdKgEIF7OY60fEob2mHmS6lXq0"
+<google-map-directions  map={{map}} api-key="API_KEY"
     start-address="{{start}}"  end-address="{{end}}" travel-mode="[[travelMode]]">
 </google-map-directions>
 
