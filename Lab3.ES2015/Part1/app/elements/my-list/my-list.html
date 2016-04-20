@@ -1,0 +1,102 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+
+<dom-module id="my-list">
+  <template>
+    <style is="custom-style">
+      .flex-horizontal-with-ratios {
+        @apply(--layout-horizontal);
+      }
+
+      .flexchild {
+        @apply(--layout-flex);
+      }
+
+      .flex2child {
+        @apply(--layout-flex-2);
+      }
+
+      .flex3child {
+        @apply(--layout-flex-3);
+      }
+    </style>
+
+    <div class="container flex-horizontal-with-ratios">
+      <div class="flexchild">
+
+
+      </div>
+      <paper-material elevation="1">
+
+        <style is="custom-style">
+          paper-card.white {
+            --paper-card-header-color: #fff;
+          }
+        </style>
+        <paper-card heading="Pre-fab homes"  image="http://www.holaislascanarias.com/sites/all/themes/holacanarias/cssinspires/img/inspiraciones/tenerife-nss-02.jpg" class="white" style="margin-bottom:8px;">
+          <div class="card-actions">
+            <paper-icon-button icon="favorite"></paper-icon-button>
+            <paper-icon-button icon="bookmark"></paper-icon-button>
+            <paper-icon-button icon="social:share"></paper-icon-button>
+          </div>
+        </paper-card>
+        <div class="horizontal">
+          <paper-card heading="Favorite trips" width="50" image="http://www.webtenerife.com/elblog/wp-content/uploads/2014/10/playa-post-TERESITAS-5.jpg" bs-width="2" class="white" style="margin-right:4px;">
+            <div class="card-actions horizontal justified">
+              <paper-icon-button icon="favorite"></paper-icon-button>
+              <paper-icon-button icon="bookmark"></paper-icon-button>
+              <paper-icon-button icon="social:share"></paper-icon-button>
+            </div>
+          </paper-card>
+          <paper-card heading="Best airlines"  width="50" image="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSvQBETHhTxMETfBJbUYCBeGkaMBhgCcAUKpKFLdbz9QJ0mdlKx" class="white" style="margin-left:4px;">
+            <div class="card-actions horizontal justified">
+              <paper-icon-button icon="favorite"></paper-icon-button>
+              <paper-icon-button icon="bookmark"></paper-icon-button>
+              <paper-icon-button icon="social:share"></paper-icon-button>
+            </div>
+          </paper-card>
+        </div>
+      </paper-material>
+
+    </div>
+  </template>
+
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        is: 'my-list',
+
+        properties: {
+          items: {
+            type: Array,
+            notify: true,
+          }
+        },
+
+        ready: function () {
+          this.items = [
+            'Responsive Web App boilerplate',
+            'Iron Elements and Paper Elements',
+            'End-to-end Build Tooling (including Vulcanize)',
+            'Unit testing with Web Component Tester',
+            'Routing with Page.js',
+            'Offline support with the Platinum Service Worker Elements'
+          ];
+        }
+      });
+    })();
+  </script>
+</dom-module>

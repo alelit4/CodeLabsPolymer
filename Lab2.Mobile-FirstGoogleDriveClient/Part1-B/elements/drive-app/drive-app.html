@@ -1,0 +1,278 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/classes/shadow-layout.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<script src="../../bower_components/cors-upload-sample/upload.js"></script>
+
+<link rel="import" href="../../bower_components/google-signin/google-signin.html">
+<link rel="import" href="../../bower_components/google-signin/google-signin-aware.html">
+
+<dom-module id="drive-app">
+  <style>
+    #dropzone {
+      border-radius: 5px;
+      padding: 90px 10px;
+      text-align: center;
+      font: 20pt bold 'sans-serif';
+      color: #bbb;
+      background: white;
+    }
+
+    #files {
+      display: block;
+      margin: 0 auto;
+      ;
+    }
+
+    #files::-webkit-file-upload-button {
+      visibility: hidden;
+    }
+
+    #files::before {
+      content: 'or click to select files';
+      background: white;
+      padding: 5px;
+      outline: none;
+      white-space: nowrap;
+      -webkit-user-select: none;
+      cursor: pointer;
+      font-size: 16pt;
+      margin: 0 auto;
+    }
+
+    #files:hover::before {
+      border-color: black;
+    }
+
+    #files:active::before {
+      background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+    }
+
+    #dropzone-bar {
+      border-bottom: 1px solid white;
+      background: rgb(229, 229, 229);
+      color: black;
+      box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 8px;
+      font-size: 1em;
+    }
+
+    .panel {
+      border-style: solid;
+      border-width: 1px;
+    }
+
+    .filelist {
+      padding-left: 0px;
+      list-style-type: none;
+    }
+
+    .filelist li {
+      background: #F5F5F5;
+      padding: 10px 10px;
+      border: 1px solid #ccc
+    }
+
+    #loggedin {
+      display: none;
+      right: 0;
+    }
+
+    #dropzone-bar {
+      right: 0;
+      position: relative;
+    }
+
+    .container {
+      width: 400px;
+      height: 500px;
+    }
+
+    #file-splitter {
+      width: 100%;
+      overflow: visible;
+    }
+
+    #upload {
+      border: 1px solid rgba(0, 0, 0, 0);
+      color: rgb(255, 255, 255);
+      background-color: rgb(65, 132, 243);
+      height: 36px;
+      line-height: 27px;
+      font-size: 0.8em;
+    }
+
+    @media (max-width: 500px) {
+      .panel {
+        width: 100%
+      }
+    }
+  </style>
+  <template>
+    <google-signin client-id="API_KEY" scopes="https://www.googleapis.com/auth/drive">
+    </google-signin>
+    <google-signin-aware scopes="https://www.googleapis.com/auth/drive" on-google-signin-aware-success="signedIn" on-google-signin-aware-signed-out="signedOut">
+    </google-signin-aware>
+
+    <div id="loggedin">
+
+    <div id="dropzone" on-tap="tapSelect" on-dragover="handleDragOver" on-drop="handleFileSelect">
+      Drag files to upload
+      <input type="file" id="files" name="files[]" on-change="handleFilePick" multiple="">
+
+      <paper-toolbar id="dropzone-bar">
+        <div class="flex">
+          <span>Auto-upload</span>
+          <paper-toggle-button oncaption="On" offcaption="Off" checked="{{autoUpload}}">
+          </paper-toggle-button>
+        </div>
+
+        <div class="flex">
+          <button id="upload" on-click="manualUpload" style$="{{computeStyle(autoUpload)}}">
+            Upload files
+          </button>
+        </div>
+
+        <div class="flex"></div>
+        <div>
+          <div id="status">Ready</div>
+        </div>
+      </paper-toolbar>
+
+      <div id="file-splitter" class="flex horizontal layout">
+        <div class="flex panel">
+          <paper-toolbar>
+            <div class="layout horizontal">Queue</div>
+          </paper-toolbar>
+          <ul class="filelist">
+            <template is="dom-repeat" items="{{uploadList}}" as="file">
+              <li>
+                <strong>{{file.name}}</strong> <span>{{file.type}}</span>
+              </li>
+            </template>
+          </ul>
+        </div>
+
+        <div class="flex panel">
+          <paper-toolbar>
+            <div class="layout horizontal">Uploaded</div>
+          </paper-toolbar>
+          <ul class="filelist">
+            <template is="dom-repeat" items="{{uploadedList}}" as="file">
+              <li>
+                <img src="{{file.iconLink}}">
+                <strong>{{file.title}}</strong>
+                <p>
+                  <a href$="{{file.selfLink}}">Drive URL</a>
+                  <a href$="{{file.webContentLink}}">Web URL</a>
+                </p>
+              </li>
+            </template>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'drive-app',
+      properties: {
+        uploadList: { // selected files
+          type: Array,
+          value: [],
+          notify: true
+        },
+        uploadedList: { // successfully uploaded files
+          type: Array,
+          value: [],
+          notify: true
+        },
+        autoUpload: { // automatically upload?
+          type: Boolean,
+          value: false,
+          notify: true
+        }
+      },
+      signedIn: function(e) {
+        this.accessToken = e.detail.access_token;
+        this.$.loggedin.style.display = 'block';
+      },
+
+      signedOut: function(e) {
+        this.$.loggedin.style.display = 'none';
+      },
+
+      manualUpload: function() {
+        this.uploadFiles(this.queue);
+      },
+
+      selectFiles: function(files) {
+        this.queue = files;
+        this.$.status.textContent = 'Files selected';
+        var f;
+        for (var i = 0; f = files[i]; i++) {
+          this.push('uploadList', f);
+        }
+
+        if (this.autoUpload) {
+          this.uploadFiles(files);
+        }
+      },
+      computeStyle: function(val) {
+        if (val) {
+          return 'display: none';
+        } else {
+          return 'display: block';
+        }
+      },
+
+      tapSelect: function(e) {
+        if (e.target.id !== 'files') {
+          this.$.files.click();
+        }
+      },
+
+      handleDragOver: function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+      },
+
+      handleFilePick: function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.selectFiles(e.target.files);
+      },
+
+      handleFileSelect: function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.selectFiles(e.dataTransfer.files);
+      },
+
+      clearUploadList: function() {
+        this.uploadedList = [];
+        this.uploadList = [];
+      },
+
+      uploadFiles: function(files) {
+        var uploadedList = this.uploadedList;
+        this.$.status.innerHTML = 'Uploading...';
+
+        var f;
+        for (var i = 0; f = files[i]; i++) {
+          var uploader = new MediaUploader({
+            file: f,
+            token: this.accessToken,
+            onComplete: function(data) {
+              this.push('uploadedList', JSON.parse(data));
+              this.$.status.innerHTML = 'Upload successful';
+              this.uploadList = [];
+            }.bind(this)
+          });
+          uploader.upload();
+        }
+      }
+    });
+  </script>
+</dom-module>
