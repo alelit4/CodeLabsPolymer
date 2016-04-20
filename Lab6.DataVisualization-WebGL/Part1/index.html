@@ -1,0 +1,57 @@
+<!doctype html>
+
+<html>
+<head>
+    <title>CodeLabGoogleMap</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <link rel="import" href="bower_components/iron-icons/iron-icons.html">
+    <link rel="import" href="bower_components/font-roboto/roboto.html">
+    <link rel="import" href="bower_components/google-map/google-map.html">
+    <link rel="import" href="bower_components/iron-icon/iron-icon.html">
+    <link rel="import" href="bower_components/iron-icons/maps-icons.html">
+    <link rel="import" href="bower_components/point-overlay/point-overlay.html">
+    <link rel="import" href="bower_components/paper-card/paper-card.html">
+    <link rel="import" href="bower_components/paper-slider/paper-slider.html">
+    <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- Code Lab step 6 -->
+<template is="dom-bind">
+
+    <google-map map={{map}} latitude="38.6" longitude="-95.8" zoom="5"
+                api-key="API_KEY"
+                styles='[{"stylers":[{"saturation":-85}]},{"featureType":"water","stylers":[{"lightness":-20}]}]'
+                disable-default-ui>
+        <!--<google-map-marker latitude="28.483036" longitude="-16.321483"
+                           title="ETSII!" draggable="true"></google-map-marker>-->
+        <!-- <point-overlay data='[{"lat": 37.7749, "lng": -122.3842}]'>
+         </point-overlay>-->
+
+        <!--<point-overlay map="[[map]]" data='[{"lat": 37.779, "lng": -122.3892}]' uniforms="{{uniforms}}">
+        </point-overlay>-->
+
+        <paper-card elevation="2">
+            <paper-slider min="5" max="100" value="50" immediate-value="{{uniforms.pointSize}}">
+            </paper-slider>
+        </paper-card>
+
+        <point-overlay map="[[map]]" uniforms="{{uniforms}}" data="{{data}}">
+        </point-overlay>
+        <iron-ajax auto handle-as="json"
+                   url="bower_components/point-overlay/tornadoes-1950-2014.json"
+                   last-response="{{data}}">
+        </iron-ajax>
+
+    </google-map>
+
+
+</template>
+</body>
+</html>
