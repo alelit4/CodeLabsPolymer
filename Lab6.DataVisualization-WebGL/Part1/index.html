@@ -23,11 +23,13 @@
 </head>
 <body>
 <!-- Code Lab step 6 -->
-<template is="dom-bind">
+<template is="dom-bind" id="t">
 
     <google-map map={{map}} latitude="38.6" longitude="-95.8" zoom="5"
-                api-key="API_KEY"
+                api-key="AIzaSyBTvG4snxoHDqOEL2tZ7cSFY1InzQVnu_w"
                 styles='[{"stylers":[{"saturation":-85}]},{"featureType":"water","stylers":[{"lightness":-20}]}]'
+                on-zoom-changed="setPointSize"
+                on-google-map-ready="setPointSize"
                 disable-default-ui>
         <!--<google-map-marker latitude="28.483036" longitude="-16.321483"
                            title="ETSII!" draggable="true"></google-map-marker>-->
@@ -37,10 +39,10 @@
         <!--<point-overlay map="[[map]]" data='[{"lat": 37.779, "lng": -122.3892}]' uniforms="{{uniforms}}">
         </point-overlay>-->
 
-        <paper-card elevation="2">
-            <paper-slider min="5" max="100" value="50" immediate-value="{{uniforms.pointSize}}">
-            </paper-slider>
-        </paper-card>
+        <!--<paper-card elevation="2">-->
+            <!--<paper-slider min="5" max="100" value="30" immediate-value="{{uniforms.pointSize}}">-->
+            <!--</paper-slider>-->
+        <!--</paper-card>-->
 
         <point-overlay map="[[map]]" uniforms="{{uniforms}}" data="{{data}}">
         </point-overlay>
@@ -51,6 +53,13 @@
 
     </google-map>
 
+    <script>
+        var t = document.querySelector('#t');
+        t.setPointSize = function(e) {
+            this.uniforms.pointSize = Math.exp(0.3 * this.map.getZoom());
+            this.notifyPath('uniforms.pointSize', this.uniforms.pointSize);
+        };
+    </script>
 
 </template>
 </body>
