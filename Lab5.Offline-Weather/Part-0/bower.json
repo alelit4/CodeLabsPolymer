@@ -1,0 +1,35 @@
+{
+  "name": "Part-0",
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "font-roboto": "PolymerElements/font-roboto#^1.0.1",
+    "hydrolysis": "Polymer/hydrolysis#^1.18",
+    "iron-a11y-announcer": "PolymerElements/iron-a11y-announcer#^1.0.0",
+    "iron-a11y-keys-behavior": "PolymerElements/iron-a11y-keys-behavior#^1.0.0",
+    "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^1.0.0",
+    "iron-ajax": "PolymerElements/iron-ajax#^1.0.0",
+    "iron-collapse": "PolymerElements/iron-collapse#^1.0.0",
+    "iron-doc-viewer": "PolymerElements/iron-doc-viewer#^1.0.0",
+    "iron-dropdown": "PolymerElements/iron-dropdown#^1.0.0",
+    "iron-elements": "polymerelements/iron-elements#^1.0.3",
+    "paper-checkbox": "PolymerElements/paper-checkbox#^1.0.0",
+    "paper-dialog-scrollable": "PolymerElements/paper-dialog-scrollable#^1.0.0",
+    "paper-dialog": "PolymerElements/paper-dialog#^1.0.0",
+    "paper-drawer-panel": "PolymerElements/paper-drawer-panel#^1.0.0",
+    "paper-badge": "PolymerElements/paper-badge#^1.0.0",
+    "paper-elements": "polymerelements/paper-elements#^1.0.4",
+    "sw-toolbox": "^3.1.1",
+    "platinum-sw": "polymerelements/platinum-sw#^1.2.0"
+  }
+}
